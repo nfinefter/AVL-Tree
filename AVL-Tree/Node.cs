@@ -23,9 +23,31 @@ namespace AVL_Tree
             }
         }
 
-        public int Height;
+        public int Height
+        {
+            get
+            {
+                if (ChildCount == 0) return 1;
 
-        public int Balance;
+                if (RightChild == null) return LeftChild.Height + 1;
+                
+                if (LeftChild == null) return RightChild.Height + 1;
+
+                if (LeftChild.Height > RightChild.Height) return LeftChild.Height + 1;
+                
+                else return RightChild.Height + 1;
+            }
+        }
+
+        public int Balance
+        {
+            get
+            {
+                return LeftChild.Height - RightChild.Height;
+            }
+        }
+
+
 
         public Node<T> First
         {

@@ -6,7 +6,10 @@ namespace AVL_Tree
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Tree<int> tree = new Tree<int>();
+
+            tree.Insert(1);
+            tree.Insert(5);
         }
     }
 }

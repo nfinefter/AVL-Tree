@@ -11,8 +11,67 @@ namespace AVL_Tree
 
         public int Count;
 
+        
+        public void Rotate(Node<T> node)
+        {
+            if (node.Balance == 0) return;
 
+            if (node.Balance > 1)
+            {
+                node.RightChild.LeftChild = node;
+                return;
+            }
+            if (node.Balance < 1)
+            { 
+                node.LeftChild.RightChild = node;
+                return;
+            }
+            
+        }
 
+        public void Rebalance(Node<T> node)
+        {
+            if (node.Balance == 0)
+            {
+                return;
+            }
+
+            if (node.Balance > 1)
+            {
+                if (node.RightChild.Balance != node.Balance)
+                {
+                    RotateRight(node);
+                }
+
+                RotateLeft(node);
+            }
+            if (node.Balance < 1)
+            {
+                if (node.LeftChild.Balance != node.Balance)
+                {
+                    RotateLeft(node);
+                }
+
+                RotateRight(node);
+            }
+        }
+
+        public Node<T> RotateLeft(Node<T> node)
+        {
+            var temp = node.RightChild;
+            node.RightChild = temp.LeftChild;
+            node.LeftChild = temp;
+            return temp;
+        }
+
+        public Node<T> RotateRight(Node<T> node)
+        {
+            var temp = node.LeftChild;
+            node.LeftChild = temp.RightChild;
+            node.RightChild = temp;
+            return temp;
+        }
+   
         public void Insert(T item)
         {
             Count++;
