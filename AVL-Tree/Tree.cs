@@ -11,7 +11,7 @@ namespace AVL_Tree
 
         public int Count;
 
-        
+
         public void Rotate(Node<T> node)
         {
             if (node.Balance == 0) return;
@@ -22,18 +22,18 @@ namespace AVL_Tree
                 return;
             }
             if (node.Balance < 1)
-            { 
+            {
                 node.LeftChild.RightChild = node;
                 return;
             }
-            
+
         }
 
-        public void Rebalance(Node<T> node)
+        public Node<T> Rebalance(Node<T> node)
         {
             if (node.Balance == 0)
             {
-                return;
+                return node;
             }
 
             if (node.Balance > 1)
@@ -54,6 +54,7 @@ namespace AVL_Tree
 
                 RotateRight(node);
             }
+            return node;
         }
 
         public Node<T> RotateLeft(Node<T> node)
@@ -71,7 +72,7 @@ namespace AVL_Tree
             node.RightChild = temp;
             return temp;
         }
-   
+
         public void Insert(T item)
         {
             Count++;
@@ -94,10 +95,10 @@ namespace AVL_Tree
 
 
             //idk what to write here
-            return;
+            return Rebalance(parent);
         }
 
-        
+
 
         public bool Delete(T item)
         {
@@ -140,7 +141,7 @@ namespace AVL_Tree
             }
 
             //Also dont know what to return
-            return;
+            return Rebalance(parent);
         }
         private Node<T> MinNode(Node<T> node)
         {
@@ -149,4 +150,75 @@ namespace AVL_Tree
                 return MinNode(node.LeftChild);
             }
         }
+        public Queue<T> PreOrder()
+        {
+            Queue<T> nodes = new Queue<T>();
+
+            preOrder(root, nodes);
+
+            return nodes;
+        }
+        private void preOrder(Node<T> node, Queue<T> nodes)
+        {
+
+            nodes.Enqueue(node.Value);
+            if (node.LeftChild != null)
+            {
+                preOrder(node.LeftChild, nodes);
+            }
+            if (node.RightChild != null)
+            {
+                preOrder(node.RightChild, nodes);
+            }
+        }
+        public Queue<T> InOrder()
+        {
+            Queue<T> nodes = new Queue<T>();
+
+            inOrder(root, nodes);
+
+            return nodes;
+
+           
+        }
+        private void inOrder(Node<T> node, Queue<T> nodes)
+        {
+            if (node.LeftChild != null)
+            {
+                inOrder(node.LeftChild, nodes);
+            }
+
+            nodes.Enqueue(node.Value);
+
+            if (node.RightChild != null)
+            {
+                inOrder(node.RightChild, nodes);
+            }
+        }
+        public Queue<T> PostOrder()
+        {
+            Queue<T> nodes = new Queue<T>();
+
+            postOrder(root, nodes);
+
+            return nodes;
+
+           
+        }
+        private void postOrder(Node<T> node, Queue<T> nodes)
+        {
+            if (node.LeftChild != null)
+            {
+                postOrder(node.LeftChild, nodes);
+            }
+
+            if (node.RightChild != null)
+            {
+                postOrder(node.RightChild, nodes);
+            }
+
+            nodes.Enqueue(node.Value);
+        }
+
     }
+}

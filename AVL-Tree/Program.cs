@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace AVL_Tree
 {
@@ -10,6 +11,15 @@ namespace AVL_Tree
 
             tree.Insert(1);
             tree.Insert(5);
+
+            Queue<int> nodes = new Queue<int>();
+
+            nodes = tree.PreOrder();
+
+            for (int i = 0; i < nodes.Count; i++)
+            {
+                Console.WriteLine(nodes.Dequeue());
+            }
         }
     }
 }

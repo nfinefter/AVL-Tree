@@ -43,6 +43,10 @@ namespace AVL_Tree
         {
             get
             {
+                if (LeftChild == null || RightChild == null)
+                {
+                    return 0;
+                }
                 return LeftChild.Height - RightChild.Height;
             }
         }
@@ -64,7 +68,6 @@ namespace AVL_Tree
         public Node(T value)
         {
             Value = value;
-            Height = 1;
         }
 
        
