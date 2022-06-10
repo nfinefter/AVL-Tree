@@ -23,6 +23,8 @@ namespace AVL_Tree
             }
         }
 
+
+
         public int Height
         {
             get
@@ -37,17 +39,30 @@ namespace AVL_Tree
                 
                 else return RightChild.Height + 1;
             }
+           set
+            {
+
+            }
         }
 
         public int Balance
         {
             get
             {
-                if (LeftChild == null || RightChild == null)
+                int leftHeight = 0;
+                int rightHeight = 0;
+                
+                if (LeftChild != null)
                 {
-                    return 0;
+                    leftHeight = LeftChild.Height;
+                }  
+
+                if (RightChild != null)
+                {
+                    rightHeight = RightChild.Height;
                 }
-                return LeftChild.Height - RightChild.Height;
+
+                return rightHeight - leftHeight;
             }
         }
 

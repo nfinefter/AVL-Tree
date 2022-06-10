@@ -12,23 +12,6 @@ namespace AVL_Tree
         public int Count;
 
 
-        public void Rotate(Node<T> node)
-        {
-            if (node.Balance == 0) return;
-
-            if (node.Balance > 1)
-            {
-                node.RightChild.LeftChild = node;
-                return;
-            }
-            if (node.Balance < 1)
-            {
-                node.LeftChild.RightChild = node;
-                return;
-            }
-
-        }
-
         public Node<T> Rebalance(Node<T> node)
         {
             if (node.Balance == 0)
@@ -38,23 +21,36 @@ namespace AVL_Tree
 
             if (node.Balance > 1)
             {
+                //Fix Rotate children being null
                 if (node.RightChild.Balance != node.Balance)
                 {
-                    RotateRight(node);
+                    node = RotateRight(node);
                 }
 
-                RotateLeft(node);
+                node = RotateLeft(node);
             }
             if (node.Balance < 1)
             {
                 if (node.LeftChild.Balance != node.Balance)
                 {
-                    RotateLeft(node);
+                     node = RotateLeft(node);
                 }
 
-                RotateRight(node);
+                node = RotateRight(node);
             }
             return node;
+        }
+        public int UpdateHeight(Node<T> node)
+        {
+            if (node.ChildCount == 0) return 1;
+
+            if (node.RightChild == null) return node.LeftChild.Height + 1;
+
+            if (node.LeftChild == null) return node.RightChild.Height + 1;
+
+            if (node.LeftChild.Height > node.RightChild.Height) return node.LeftChild.Height + 1;
+
+            else return node.RightChild.Height + 1;
         }
 
         public Node<T> RotateLeft(Node<T> node)
@@ -62,6 +58,7 @@ namespace AVL_Tree
             var temp = node.RightChild;
             node.RightChild = temp.LeftChild;
             node.LeftChild = temp;
+            UpdateHeight(node);
             return temp;
         }
 
@@ -70,8 +67,10 @@ namespace AVL_Tree
             var temp = node.LeftChild;
             node.LeftChild = temp.RightChild;
             node.RightChild = temp;
+            UpdateHeight(node);
             return temp;
         }
+
 
         public void Insert(T item)
         {
@@ -93,26 +92,20 @@ namespace AVL_Tree
                 parent.RightChild = Insert(item, parent.RightChild);
             }
 
-
-            //idk what to write here
+            parent.Height = UpdateHeight(parent);
             return Rebalance(parent);
         }
-
-
 
         public bool Delete(T item)
         {
             int old = Count;
             root = Delete(item, root);
-            if (Count == old)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
+            
+            if (Count == old)  return false;
+            
+            else return true;
         }
+
         private Node<T> Delete(T item, Node<T> parent)
         {
             if (parent == null) return null;
@@ -139,17 +132,20 @@ namespace AVL_Tree
                     return parent.First;
                 }
             }
-
-            //Also dont know what to return
+            parent.Height = UpdateHeight(parent);
             return Rebalance(parent);
         }
+
         private Node<T> MinNode(Node<T> node)
         {
+            if (node.LeftChild == null)
             {
-                if (node.LeftChild == null) return node;
-                return MinNode(node.LeftChild);
-            }
+                return node;
+            }  
+            
+            return MinNode(node.LeftChild);
         }
+
         public Queue<T> PreOrder()
         {
             Queue<T> nodes = new Queue<T>();
@@ -160,8 +156,8 @@ namespace AVL_Tree
         }
         private void preOrder(Node<T> node, Queue<T> nodes)
         {
-
             nodes.Enqueue(node.Value);
+
             if (node.LeftChild != null)
             {
                 preOrder(node.LeftChild, nodes);
@@ -178,8 +174,6 @@ namespace AVL_Tree
             inOrder(root, nodes);
 
             return nodes;
-
-           
         }
         private void inOrder(Node<T> node, Queue<T> nodes)
         {
@@ -195,6 +189,7 @@ namespace AVL_Tree
                 inOrder(node.RightChild, nodes);
             }
         }
+
         public Queue<T> PostOrder()
         {
             Queue<T> nodes = new Queue<T>();
@@ -202,9 +197,8 @@ namespace AVL_Tree
             postOrder(root, nodes);
 
             return nodes;
-
-           
         }
+
         private void postOrder(Node<T> node, Queue<T> nodes)
         {
             if (node.LeftChild != null)

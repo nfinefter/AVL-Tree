@@ -10,13 +10,16 @@ namespace AVL_Tree
             Tree<int> tree = new Tree<int>();
 
             tree.Insert(1);
+            tree.Insert(3);
             tree.Insert(5);
+            tree.Insert(7);
+            tree.Insert(8);
+            tree.Insert(10);
 
-            Queue<int> nodes = new Queue<int>();
+            //should be root first, root = 7
+            Queue<int> nodes = tree.PreOrder();
 
-            nodes = tree.PreOrder();
-
-            for (int i = 0; i < nodes.Count; i++)
+            while (nodes.Count != 0)
             {
                 Console.WriteLine(nodes.Dequeue());
             }
