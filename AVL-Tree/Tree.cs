@@ -11,33 +11,33 @@ namespace AVL_Tree
 
         public int Count;
 
+        public Tree ()
+        {
+            root = null;
+            Count = 0;
+        }
 
         public Node<T> Rebalance(Node<T> node)
         {
-            if (node.Balance == 0)
+            if (node.Balance < -1)
             {
-                return node;
-            }
-
-            if (node.Balance > 1)
-            {
-                //Fix Rotate children being null
-                if (node.RightChild.Balance != node.Balance)
+                if (node.LeftChild.Balance > 0)
                 {
-                    node = RotateRight(node);
-                }
-
-                node = RotateLeft(node);
-            }
-            if (node.Balance < 1)
-            {
-                if (node.LeftChild.Balance != node.Balance)
-                {
-                     node = RotateLeft(node);
+                    node.LeftChild = RotateLeft(node.LeftChild);
                 }
 
                 node = RotateRight(node);
             }
+            else if (node.Balance > 1)
+            {
+                if (node.RightChild.Balance < 0)
+                {
+                    node.RightChild = RotateRight(node.RightChild);
+                }
+
+                node = RotateLeft(node);
+            }
+
             return node;
         }
         public int UpdateHeight(Node<T> node)
@@ -57,7 +57,7 @@ namespace AVL_Tree
         {
             var temp = node.RightChild;
             node.RightChild = temp.LeftChild;
-            node.LeftChild = temp;
+            node.LeftChild = node;
             UpdateHeight(node);
             return temp;
         }
@@ -66,7 +66,7 @@ namespace AVL_Tree
         {
             var temp = node.LeftChild;
             node.LeftChild = temp.RightChild;
-            node.RightChild = temp;
+            node.RightChild = node;
             UpdateHeight(node);
             return temp;
         }
