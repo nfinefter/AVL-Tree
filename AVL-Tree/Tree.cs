@@ -40,24 +40,41 @@ namespace AVL_Tree
 
             return node;
         }
-        public int UpdateHeight(Node<T> node)
+        public void UpdateHeight(Node<T> node)
         {
-            if (node.ChildCount == 0) return 1;
+            if (node.ChildCount == 0)
+            {
+                node.Height = 1;
+                return;
+            }
+            if (node.RightChild == null)
+            {
+                node.Height = node.LeftChild.Height + 1;
+                return;
+            }
+            if (node.LeftChild == null)
+            {
+                node.Height = node.RightChild.Height + 1;
+                return;
+            }
+            if (node.LeftChild.Height > node.RightChild.Height)
+            {
+                node.Height = node.LeftChild.Height + 1;
+                return;
+            }
 
-            if (node.RightChild == null) return node.LeftChild.Height + 1;
-
-            if (node.LeftChild == null) return node.RightChild.Height + 1;
-
-            if (node.LeftChild.Height > node.RightChild.Height) return node.LeftChild.Height + 1;
-
-            else return node.RightChild.Height + 1;
+            else
+            {
+                node.Height = node.RightChild.Height + 1;
+            }
+            return;
         }
 
         public Node<T> RotateLeft(Node<T> node)
         {
             var temp = node.RightChild;
             node.RightChild = temp.LeftChild;
-            node.LeftChild = node;
+            temp.LeftChild = node;
             UpdateHeight(node);
             return temp;
         }
@@ -66,7 +83,7 @@ namespace AVL_Tree
         {
             var temp = node.LeftChild;
             node.LeftChild = temp.RightChild;
-            node.RightChild = node;
+            temp.RightChild = node;
             UpdateHeight(node);
             return temp;
         }
@@ -92,7 +109,7 @@ namespace AVL_Tree
                 parent.RightChild = Insert(item, parent.RightChild);
             }
 
-            parent.Height = UpdateHeight(parent);
+            UpdateHeight(parent);
             return Rebalance(parent);
         }
 
@@ -132,7 +149,7 @@ namespace AVL_Tree
                     return parent.First;
                 }
             }
-            parent.Height = UpdateHeight(parent);
+            UpdateHeight(parent);
             return Rebalance(parent);
         }
 
@@ -213,6 +230,39 @@ namespace AVL_Tree
 
             nodes.Enqueue(node.Value);
         }
+        public Queue<T> LevelOrder()
+        {
+            Queue<T> nodes = new Queue<T>();
+
+            levelOrder(root, nodes);
+
+            return nodes;
+        }
+        private void levelOrder(Node<T> node, Queue<T> nodes)
+        {
+            Queue<Node<T>> processor = new Queue<Node<T>>();
+
+            processor.Enqueue(node);
+
+            while(processor.Count != 0)
+            {
+                
+                node = processor.Dequeue();
+                nodes.Enqueue(node.Value);
+                if (node.LeftChild != null) 
+                {
+                    processor.Enqueue(node.LeftChild);
+                }
+                  
+                if (node.RightChild != null)
+                {
+                    processor.Enqueue(node.RightChild);
+                }
+      
+            }
+            
+        }
+
 
     }
 }

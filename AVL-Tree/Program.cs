@@ -17,7 +17,7 @@ namespace AVL_Tree
             tree.Insert(10);
 
             //should be root first, root = 7
-            Queue<int> nodes = tree.PreOrder();
+            Queue<int> nodes = tree.LevelOrder();
 
             while (nodes.Count != 0)
             {
